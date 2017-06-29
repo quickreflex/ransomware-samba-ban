@@ -1,7 +1,8 @@
 #!/bin/bash
 
-known_ransom="\.ipygh"
-known_ransom+="\.via"
+known_ransom="\.gankLocked|"
+known_ransom+="\.ipygh|"
+known_ransom+="\.via|"
 known_ransom+="\.lamo|"
 known_ransom+="\.suppose666|"
 known_ransom+="\.mention9823|"
