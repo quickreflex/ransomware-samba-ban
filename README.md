@@ -32,4 +32,4 @@ There is also a sample smb.conf file for reference
 
 ## How it works
 
-Basically, what it does is enable full audit in Samba server and monitor the logs for known ransomware extensions and file names. When it detect a ransomware activity, it bans the client IP.
+Basically, what it does is enable full audit in Samba server and monitor the logs for known ransomware extensions and file names. When detect a ransomware activity, it bans the client IP.
