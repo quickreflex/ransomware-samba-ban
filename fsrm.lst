@@ -1,3 +1,4 @@
+*.lalabitch,
 *.gankLocked
 perfc.dll
 perfc.dat
