@@ -7,6 +7,8 @@ Bash script to detect ransomware activity and ban client IP address from samba f
 For proper work, it is required:
 * Netfilter/Iptables - http://www.netfilter.org
 * inotify-tools - https://github.com/rvoicilas/inotify-tools
+* curl - https://curl.haxx.se
+* jq - https://stedolan.github.io/jq/
 
 ## Installation
 
