@@ -36,20 +36,19 @@ for ln in "${known_ransom[@]}"; do
 done
 
 while inotifywait -e modify /var/log/messages; do
-    mapfile -t log_messages < /var/log/messages
-    for line in "${log_messages[@]}"; do
-	if [[ "$line" = *smbd* ]]; then
-		for ln in "${known_ransom[@]}"; do
-		   if [[ "$line" = *smbd*$ln ]]; then
-			OIFS="$IFS"
-			IFS='[=,|]'
-			read -a clientIP <<< "${line}"
-			IFS="$OIFS"
-			echo "Detecting ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
-			iptables -D INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
-			iptables -I INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
-		   fi
-		done
-	fi
-    done
+    while read line; do
+        if [[ "$line" = *smbd* ]]; then
+               for ln in "${known_ransom[@]}"; do
+                    if [[ "$line" = *smbd*$ln ]]; then
+                        OIFS="$IFS"
+                        IFS='[=,|]'
+                        read -a clientIP <<< "${line}"
+                        IFS="$OIFS"
+                        echo "Detecting ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
+                        iptables -D INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
+                        iptables -I INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
+                    fi
+                done
+        fi
+    done < /var/log/messages
 done
