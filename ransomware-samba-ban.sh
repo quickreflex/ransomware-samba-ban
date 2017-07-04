@@ -35,6 +35,8 @@ for ln in "${known_ransom[@]}"; do
     i=$((i+1))
 done
 
+defInt=$(route | grep '^default' | grep -o '[^ ]*$')
+
 while inotifywait -e modify /var/log/messages; do
     while read line; do
         if [[ "$line" = *smbd* ]]; then
@@ -45,8 +47,8 @@ while inotifywait -e modify /var/log/messages; do
                         read -a clientIP <<< "${line}"
                         IFS="$OIFS"
                         echo "Detecting ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
-                        iptables -D INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
-                        iptables -I INPUT -i eth1 -s ${clientIP[1]//[[:space:]]/} -j DROP
+                        iptables -D INPUT -i $defInt -s ${clientIP[1]//[[:space:]]/} -j DROP
+                        iptables -I INPUT -i $defInt -s ${clientIP[1]//[[:space:]]/} -j DROP
                     fi
                 done
         fi
