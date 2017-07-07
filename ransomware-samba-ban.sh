@@ -19,7 +19,7 @@ while inotifywait -e modify /var/log/messages; do
                    IFS='[=,|]'
                    read -a clientIP <<< "${line}"
                    IFS="$OIFS"
-                   chkRule=$(iptables '-L' '-n' | grep '^DROP.*192.168.1.103.*')
+                   chkRule=$(iptables '-L' '-n' | grep '^DROP.*${clientIP[1]//[[:space:]]/}.*')
                    if [[ $chkRule == "" ]]; then
                         iptables -I INPUT -i $defInt -s ${clientIP[1]//[[:space:]]/} -j DROP
                         echo "Detected ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
