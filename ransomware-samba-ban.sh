@@ -11,19 +11,20 @@ mapfile -t known_ransom < /tmp/fsrm.lst
 defInt=$(route | grep '^default' | grep -o '[^ ]*$')
 
 while inotifywait -e modify /var/log/messages; do
+    grep '"*smbd"*' /var/log/messages > /tmp/samba_log.lst
     while read line; do
-        if [[ "$line" = *smbd* ]]; then
-               for ln in "${known_ransom[@]}"; do
-                    if [[ "$line" = *smbd*$ln ]]; then
-                        OIFS="$IFS"
-                        IFS='[=,|]'
-                        read -a clientIP <<< "${line}"
-                        IFS="$OIFS"
-                        echo "Detected ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
-                        iptables -D INPUT -i $defInt -s ${clientIP[1]//[[:space:]]/} -j DROP
+          for ln in "${known_ransom[@]}"; do
+               if [[ "$line" = *smbd*$ln ]]; then
+                   OIFS="$IFS"
+                   IFS='[=,|]'
+                   read -a clientIP <<< "${line}"
+                   IFS="$OIFS"
+                   chkRule=$(iptables '-L' '-n' | grep '^DROP.*192.168.1.103.*')
+                   if [[ $chkRule == "" ]]; then
                         iptables -I INPUT -i $defInt -s ${clientIP[1]//[[:space:]]/} -j DROP
-                    fi
-                done
-        fi
-    done < /var/log/messages
+                        echo "Detected ransomware activity from this ip: "${clientIP[1]//[[:space:]]/} >> /var/log/ransomware_ban.log
+                   fi
+               fi
+          done
+    done < /tmp/samba_log.lst
 done
