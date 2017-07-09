@@ -1,6 +1,6 @@
 # Ransomware Samba Ban
 
-Bash script to detect ransomware activity and ban client IP address from samba file server.
+This is bash script to detect ransomware activity and ban infected IP address to protect us from files encryption at samba server.
 
 ## Requirements
 
@@ -34,4 +34,4 @@ There is also a sample smb.conf file for reference
 
 ## How it works
 
-Basically, what it does is enable full audit in Samba server and monitor the logs for known ransomware extensions and file names. When detect a ransomware activity, it bans the client IP.
+Basically, what it does is enable full audit in Samba server and monitor the logs for known ransomware extensions and file names. When detect a ransomware activity, it ban infected IP address to protect us from files encryption at samba server.
