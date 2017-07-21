@@ -1,6 +1,11 @@
 #!/bin/bash
 
-curl -o /tmp/fsrm.json https://fsrm.experiant.ca/api/v1/combined
+while true; do
+    if curl --output /dev/null --silent --head --fail https://fsrm.experiant.ca/api/v1/combined; then
+        curl -o /tmp/fsrm.json https://fsrm.experiant.ca/api/v1/combined && break
+    fi
+done
+
 jq -r .filters[] /tmp/fsrm.json > /tmp/fsrm.lst
 
 sed -i 's/\./\\./g; s/\[/\\[/g; s/\]/\\]/g; s/(/\\(/g; s/)/\\)/g; s/{/\\{/g; s/}/\\}/g; s/\@/\\@/g; s/\$/\\$/g' /tmp/fsrm.lst
