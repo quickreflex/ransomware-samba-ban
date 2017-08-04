@@ -7,6 +7,7 @@ This is bash script to detect ransomware activity and ban infected IP address to
 For proper work, it is required:
 * Netfilter/Iptables - http://www.netfilter.org
 * inotify-tools - https://github.com/rvoicilas/inotify-tools
+* grep - https://www.gnu.org/software/grep/
 * curl - https://curl.haxx.se
 * jq - https://stedolan.github.io/jq/
 
